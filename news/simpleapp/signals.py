@@ -1,10 +1,10 @@
 from django.core.mail import EmailMultiAlternatives
-from django.db.models.signals import m2m_changed, post_save
+from django.db.models.signals import m2m_changed, post_save, pre_save, post_delete, post_init
 from django.dispatch import receiver
 from django.template.loader import render_to_string
-
+from django.core.cache import cache
 from django.conf import settings
-from .models import PostCategory,User
+from .models import PostCategory, User, News
 from .tasks import send_notifications
 
 
@@ -50,3 +50,14 @@ def hello_new_user(sender, instance,created, **kwargs):
         email = [instance.email]
         user = instance
         send_new_user(user,email)
+
+
+@receiver(post_delete, sender=News)
+def delete_post(sender, instance, **kwargs):
+    id = instance.id
+    cache.delete(f'news-{id}')
+
+@receiver(post_save, sender=News)
+def update_post(sender, instance, **kwargs):
+    id = str(instance.id)
+    cache.delete(f'news-{id}')

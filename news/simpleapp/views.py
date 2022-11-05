@@ -4,12 +4,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.models import User, Group
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render
-from django.urls import reverse_lazy
+from django.shortcuts import get_object_or_404, render, redirect
+from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from .forms import NewsForm
 from .models import News, NewsCategory, Author
 from .filters import NewsFilter
+from django.core.cache import cache
 from django.core.mail import EmailMultiAlternatives  # импортируем класс для создание объекта письма с html
 from django.template.loader import render_to_string  # импортируем функцию, которая срендерит наш html в текст
 from django.conf import settings
@@ -26,7 +27,6 @@ class Profile(ListView):
         context['is_author'] = Author.objects.filter(authorUser_id=self.request.user.id).exists()
         context['profile'] = self.request.user
         context['email'] = self.request.user.email
-        print(Author.objects.filter(authorUser_id=self.request.user.id).exists())
         return context
 
 
@@ -45,12 +45,22 @@ class NewsList(ListView):
 
 
 class NewsDetail(DetailView):
-    # Модель всё та же, но мы хотим получать информацию по отдельному товару
     model = News
-    # Используем другой шаблон — product.html
     template_name = 'news_id.html'
-    # Название объекта, в котором будет выбранный пользователем продукт
     context_object_name = 'news'
+    queryset = News.objects.all()
+
+    def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
+        obj = cache.get(f'news-{self.kwargs["pk"]}',
+                        None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
+        # если объекта нет в кэше, то получаем его и записываем в кэш
+        # print(obj)
+        if not obj:
+            obj = super().get_object(queryset=self.queryset)
+            # print(obj)
+            cache.set(f'news-{self.kwargs["pk"]}', obj)
+        # print(cache.get(f'news-23'))
+        return obj
 
 
 class NewsSearch(ListView):
@@ -158,7 +168,6 @@ def subscribe(request, pk):
 @login_required  # проверка зареган ли user
 def save_author(request):
     user = User.objects.get(id=request.user.id)
-    print(user)
     message = 'Поздравляю вы теперь автор!'
 
     group = Group.objects.get(id=1)
@@ -167,3 +176,13 @@ def save_author(request):
     return render(request, 'save_author.html', {'message': message})
 
 
+@login_required  # проверка зареган ли user
+def like_news(request, pk):
+    News.objects.get(id=pk).like()
+    return redirect(reverse('news_detail',args=[str(pk)]))
+
+
+@login_required  # проверка зареган ли user
+def dislike_news(request, pk):
+    News.objects.get(id=pk).dislike()
+    return redirect(reverse('news_detail',args=[str(pk)]))

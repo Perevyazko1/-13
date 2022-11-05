@@ -25,17 +25,19 @@ News
 
 
         <ul class="list-group-flush">
-           {% for new in news|dictsort:"dateCreation" %}
-                <li class="list-group-item">
-            <small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
-                       <small class="fw-bold">{{ new.title|censor }}&nbsp;</small>
+           {% for new in news|dictsortreversed:"dateCreation"%}
+            <li class="list-group-item">
+                    <small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
+                    <small class="fw-bold">{{ new.title|censor }}&nbsp;</small>
                     <small class="fw-bold">категории:
-
-                            {% for category in new.category.all %}
+                        {% for category in new.category.all %}
                             <a href="{% url 'category_list' category.id %}"> {{ category }}</a>
                         {% endfor %}
-                        </small>
-                     <p><a href="{% url 'news_detail' new.id %}">{{ new.text|censor|truncatechars:20}}</a></p>
+                    </small>
+                     <p>
+                         <a href="{% url 'news_detail' new.id %}">{{ new.text|censor|truncatechars:20}}</a>
+                    <small class="fw-bold"> Рэйтинг {{ new.rating}}&nbsp;</small>
+                     </p>
                 </li>
         </ul>
                     <td>

@@ -58,15 +58,11 @@ class News(models.Model):
     category = models.ManyToManyField(NewsCategory, through='Postcategory')
     title = models.CharField(max_length=128, verbose_name='Заголовок')
     text = models.TextField(verbose_name='Текст')
-    rating = models.SmallIntegerField(default=0)
+    rating = models.ManyToManyField(User, default=0, related_name='rating')
+    ordering = ['-dateCreation']
 
-    def like(self):
-        self.rating += 1
-        self.save()
-
-    def dislike(self):
-        self.rating -= 1
-        self.save()
+    def total_likes(self):
+        return self.rating.count()
 
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.id)])

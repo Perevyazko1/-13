@@ -44,11 +44,20 @@ class NewsList(ListView):
     paginate_by = 10  # регулируем количество записей на странице
 
 
+
 class NewsDetail(DetailView):
     model = News
     template_name = 'news_id.html'
     context_object_name = 'news'
     queryset = News.objects.all()
+
+
+    def get_context_data(self, *args,**kwargs):
+        context = super(NewsDetail, self).get_context_data(**kwargs)
+        news = get_object_or_404(News, id=self.kwargs["pk"])
+        total_likes = news.total_likes()
+        context['count'] = total_likes
+        return context
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
         obj = cache.get(f'news-{self.kwargs["pk"]}',
@@ -111,13 +120,14 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
         # пользователем-юзер
         return super().form_valid(
             form)
-  # Вызываем метод в родительском классе с измененной формой (а именно - определение поля author)
+
+
+# Вызываем метод в родительском классе с измененной формой (а именно - определение поля author)
 
 
 # Добавляем представление для изменения товара.
 class NewsUpdate(PermissionRequiredMixin, UpdateView):
     permission_required = ('simpleapp.change_news',)
-
     form_class = NewsForm
     model = News
     template_name = 'edit_news.html'
@@ -178,11 +188,8 @@ def save_author(request):
 
 @login_required  # проверка зареган ли user
 def like_news(request, pk):
-    News.objects.get(id=pk).like()
-    return redirect(reverse('news_detail',args=[str(pk)]))
-
-
-@login_required  # проверка зареган ли user
-def dislike_news(request, pk):
-    News.objects.get(id=pk).dislike()
-    return redirect(reverse('news_detail',args=[str(pk)]))
+    n = News.objects.get(id=pk)
+    u = User.objects.get(id=request.user.id)
+    n.rating.add(u)
+    # n.rating.remove(u)
+    return redirect(reverse('news_detail', args=[str(pk)]))

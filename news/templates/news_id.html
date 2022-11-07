@@ -24,8 +24,7 @@
         <h4>{{news.dateCreation|date:'d M Y'}}</h4>
 
         <p class="text-center"><a href="{% url 'like_news' news.id %}" class="btn btn-secondary btn-sm">Like</a></p>
-        <p class="text-center"><a href="{% url 'dislike_news' news.id %}" class="btn btn-secondary btn-sm">Dislike</a></p>
-
+        <small class="fw-bold"> Рэйтинг {{ count }}</small>
    {% else %}
        <h2>Новостей нет, но вы держитесь!</h2>
    {% endif %}

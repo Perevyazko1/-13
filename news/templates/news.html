@@ -36,7 +36,7 @@ News
                     </small>
                      <p>
                          <a href="{% url 'news_detail' new.id %}">{{ new.text|censor|truncatechars:20}}</a>
-                    <small class="fw-bold"> Рэйтинг {{ new.rating}}&nbsp;</small>
+                    <small class="fw-bold"> Рэйтинг {{ count }}</small>
                      </p>
                 </li>
         </ul>

@@ -190,6 +190,8 @@ def save_author(request):
 def like_news(request, pk):
     n = News.objects.get(id=pk)
     u = User.objects.get(id=request.user.id)
-    n.rating.add(u)
-    # n.rating.remove(u)
+    if n.rating.filter(id=u.id).exists():
+        n.rating.remove(u)
+    else:
+        n.rating.add(u)
     return redirect(reverse('news_detail', args=[str(pk)]))

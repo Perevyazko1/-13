@@ -58,7 +58,7 @@ class News(models.Model):
     category = models.ManyToManyField(NewsCategory, through='Postcategory')
     title = models.CharField(max_length=128, verbose_name='Заголовок')
     text = models.TextField(verbose_name='Текст')
-    rating = models.ManyToManyField(User, default=0, related_name='rating')
+    rating = models.ManyToManyField(User, related_name='rating')
     ordering = ['-dateCreation']
 
     def total_likes(self):

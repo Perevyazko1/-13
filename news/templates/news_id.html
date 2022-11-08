@@ -23,9 +23,14 @@
 
         <h4>{{news.dateCreation|date:'d M Y'}}</h4>
 
-        <p class="text-center"><a href="{% url 'like_news' news.id %}" class="btn btn-secondary btn-sm">Like</a></p>
-        <small class="fw-bold"> Рэйтинг {{ count }}</small>
-   {% else %}
+        <p class="text-center"><a href="{% url 'like_news' news.id %}" class="btn btn-secondary btn-sm">❤ {{ count }}</a></p>
+        <p class="text-center"><a href="{% url 'comment_news' news.id %}" class="btn btn-secondary btn-sm">Оставить коментарий</a></p>
+        <ul class="list-group-flush">
+            {% for comments in comment %}
+                <p class="fw-bold">{{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: {{ comments.text|censor }} </p>
+            {% endfor %}
+        </ul>
+    {% else %}
        <h2>Новостей нет, но вы держитесь!</h2>
    {% endif %}
 

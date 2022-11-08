@@ -90,6 +90,10 @@ class Comment(models.Model):
     dateCreation = models.DateTimeField(auto_now_add=True)
     rating = models.SmallIntegerField(default=0)
 
+    def get_absolute_url(self):
+        return reverse('news_detail', args=[str(self.commentPost.id)])
+
+
     def like(self):
         self.rating += 1
         self.save()

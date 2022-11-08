@@ -7,8 +7,8 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import NewsForm
-from .models import News, NewsCategory, Author
+from .forms import NewsForm,CommentNewsForm
+from .models import News, NewsCategory, Author, Comment
 from .filters import NewsFilter
 from django.core.cache import cache
 from django.core.mail import EmailMultiAlternatives  # импортируем класс для создание объекта письма с html
@@ -57,6 +57,7 @@ class NewsDetail(DetailView):
         news = get_object_or_404(News, id=self.kwargs["pk"])
         total_likes = news.total_likes()
         context['count'] = total_likes
+        context['comment'] = Comment.objects.filter(commentPost=self.kwargs["pk"])
         return context
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
@@ -195,3 +196,28 @@ def like_news(request, pk):
     else:
         n.rating.add(u)
     return redirect(reverse('news_detail', args=[str(pk)]))
+
+
+class CommentNewsCreate(PermissionRequiredMixin, CreateView):
+    permission_required = ('simpleapp.add_news',)
+    raise_exception = True
+    # Указываем нашу разработанную форму
+    form_class = CommentNewsForm
+    # модель товаров
+    model = Comment
+    # и новый шаблон, в котором используется форма.
+    template_name = 'edit_comment_news.html'
+
+    def form_valid(self, form):  # Переопределение метода при валидации формы NewsForm
+
+        self.object = form.save(commit=False
+                                )  # object - экземпляр заполненной формы NewsForm из запроса POST. В БД не сохраняем
+        self.object.commentUser = User.objects.get(
+            username=self.request.user
+        )  # Назначяем полю author модели News экзамеляр модели Author, где пользователь-автор совпадает с
+        # пользователем-юзер
+        # self.object.commentPost = News.objects.get(
+        #     id=self.request.news.id)
+        print(request.news)
+        return super().form_valid(
+            form)

@@ -27,7 +27,7 @@
         <p class="text-center"><a href="{% url 'comment_news' news.id %}" class="btn btn-secondary btn-sm">Оставить коментарий</a></p>
         <ul class="list-group-flush">
             {% for comments in comment %}
-                <p class="fw-bold">{{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: {{ comments.text|censor }} </p>
+                <p>{{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: <em>{{ comments.text|censor }}</em> </p>
             {% endfor %}
         </ul>
     {% else %}

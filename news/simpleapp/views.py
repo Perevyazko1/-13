@@ -216,8 +216,8 @@ class CommentNewsCreate(PermissionRequiredMixin, CreateView):
             username=self.request.user
         )  # Назначяем полю author модели News экзамеляр модели Author, где пользователь-автор совпадает с
         # пользователем-юзер
-        # self.object.commentPost = News.objects.get(
-        #     id=self.request.news.id)
-        print(request.news)
+        self.object.commentPost = News.objects.get(
+            id=self.kwargs["pk"])
+        # print(request.news)
         return super().form_valid(
             form)

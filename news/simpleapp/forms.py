@@ -45,6 +45,6 @@ class CommentNewsForm(forms.ModelForm):
         model = Comment
         fields = [
             'text',
-            'commentPost',
+            # 'commentPost',
             # 'commentUser',
 ]

@@ -221,3 +221,11 @@ class CommentNewsCreate(PermissionRequiredMixin, CreateView):
         # print(request.news)
         return super().form_valid(
             form)
+
+
+@login_required  # проверка зареган ли user
+def delete_comment(request, pk):
+    n=Comment.objects.get(id=pk).commentPost.id
+    Comment.objects.get(id=pk).delete()
+
+    return redirect(reverse('news_detail' ,args=[str(n)]))

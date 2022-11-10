@@ -198,8 +198,7 @@ def like_news(request, pk):
     return redirect(reverse('news_detail', args=[str(pk)]))
 
 
-class CommentNewsCreate(PermissionRequiredMixin, CreateView):
-    permission_required = ('simpleapp.add_news',)
+class CommentNewsCreate(LoginRequiredMixin, CreateView):
     raise_exception = True
     # Указываем нашу разработанную форму
     form_class = CommentNewsForm

@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import NewsForm,CommentNewsForm
+from .forms import NewsForm, CommentNewsForm
 from .models import News, NewsCategory, Author, Comment
 from .filters import NewsFilter
 from django.core.cache import cache
@@ -44,15 +44,13 @@ class NewsList(ListView):
     paginate_by = 10  # регулируем количество записей на странице
 
 
-
 class NewsDetail(DetailView):
     model = News
     template_name = 'news_id.html'
     context_object_name = 'news'
     queryset = News.objects.all()
 
-
-    def get_context_data(self, *args,**kwargs):
+    def get_context_data(self, *args, **kwargs):
         context = super(NewsDetail, self).get_context_data(**kwargs)
         news = get_object_or_404(News, id=self.kwargs["pk"])
         # comment = get_object_or_404(Comment, id=self.kwargs["pk"])
@@ -65,7 +63,8 @@ class NewsDetail(DetailView):
 
     def get_object(self, *args, **kwargs):  # переопределяем метод получения объекта, как ни странно
         obj = cache.get(f'news-{self.kwargs["pk"]}',
-                        None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по ключу, если его нет, то забирает None.
+                        None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по
+        # ключу, если его нет, то забирает None.
         # если объекта нет в кэше, то получаем его и записываем в кэш
         # print(obj)
         if not obj:
@@ -227,10 +226,10 @@ class CommentNewsCreate(LoginRequiredMixin, CreateView):
 
 @login_required  # проверка зареган ли user
 def delete_comment(request, pk):
-    n=Comment.objects.get(id=pk).commentPost.id
+    n = Comment.objects.get(id=pk).commentPost.id
     Comment.objects.get(id=pk).delete()
 
-    return redirect(reverse('news_detail' ,args=[str(n)]))
+    return redirect(reverse('news_detail', args=[str(n)]))
 
 
 @login_required  # проверка зареган ли user

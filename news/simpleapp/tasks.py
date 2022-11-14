@@ -8,9 +8,10 @@ from django.conf import settings
 from django.utils import timezone
 import datetime
 
+
 # celery -A news worker -l INFO
 @shared_task(serializer='json')
-def send_notifications(id, title, text ):
+def send_notifications(id, title, text):
     send_list = list(
         PostCategory.objects.filter(
             postThrough_id=id
@@ -23,27 +24,28 @@ def send_notifications(id, title, text ):
     )
 
     for user, first_name, email, category in send_list:
-            # получаем наш html
-            to_email = [email]
-            html_content = render_to_string(
-                'post_created.html',
-                {
-                    'text': text,
-                    'link': f'{settings.SITE_URL}/news/{id}',
-                    'title': title,
-                    'user': user,
-                }
-            )
-            msg = EmailMultiAlternatives(
-                subject= title,
-                body='',  # это то же, что и message
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                to= to_email,  # это то же, что и recipients_list
+        # получаем наш html
+        to_email = [email]
+        html_content = render_to_string(
+            'post_created.html',
+            {
+                'text': text,
+                'link': f'{settings.SITE_URL}/news/{id}',
+                'title': title,
+                'user': user,
+            }
+        )
+        msg = EmailMultiAlternatives(
+            subject=title,
+            body='',  # это то же, что и message
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=to_email,  # это то же, что и recipients_list
 
-            )
-            print('Send mail')
-            msg.attach_alternative(html_content, 'text/html')  # добавляем html
-            msg.send()  # отсылаем
+        )
+        print('Send mail')
+        msg.attach_alternative(html_content, 'text/html')  # добавляем html
+        msg.send()  # отсылаем
+
 
 @shared_task(serializer='json')
 def send_subscribe():
@@ -51,7 +53,6 @@ def send_subscribe():
     last_week = today - datetime.timedelta(days=7)
     all_news = News.objects.filter(dateCreation__gte=last_week)
     categories = set(all_news.values_list('category__name', flat=True))
-
 
     send_list = list(
         NewsCategory.objects.filter(
@@ -74,7 +75,7 @@ def send_subscribe():
         msg = EmailMultiAlternatives(
             subject='Статьи за неделю',
             body='',  # это то же, что и message
-            from_email= settings.DEFAULT_FROM_EMAIL,
+            from_email=settings.DEFAULT_FROM_EMAIL,
             to=subscribes,  # это то же, что и recipients_list
 
         )

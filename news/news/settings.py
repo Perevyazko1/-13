@@ -13,9 +13,8 @@ import os
 from pathlib import Path
 from dotenv import load_dotenv
 
-
 load_dotenv()
-env_path = Path('.')/'.env'
+env_path = Path('.') / '.env'
 load_dotenv(dotenv_path=env_path)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -57,7 +56,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 SITE_URL = 'http://127.0.0.1:8000'
 LOGIN_REDIRECT_URL = "/news"
-LOGOUT_REDIRECT_URL ="/news"
+LOGOUT_REDIRECT_URL = "/news"
 # Этого раздела может не быть, добавьте его в указанном виде.
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -164,21 +163,25 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'  # верификация почты отс�
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'  # адрес сервера Яндекс-почты для всех один и тот же
 EMAIL_PORT = 465  # порт smtp сервера тоже одинаковый
-EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # ваше имя пользователя, например, если ваша почта user@yandex.ru, то сюда надо писать user, иными словами, это всё то что идёт до собаки
+EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # ваше имя пользователя, например, если ваша почта user@yandex.ru,
+# то сюда надо писать user, иными словами, это всё то что идёт до собаки
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # пароль от почты
-EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках, но включать его здесь обязательно
+EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках,
+# но включать его здесь обязательно
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
-
-CELERY_BROKER_URL = 'redis://localhost:6379'  #указывает на URL брокера сообщений (Redis). По умолчанию он находится на порту 6379
-CELERY_RESULT_BACKEND = 'redis://localhost:6379'  #указывает на хранилище результатов выполнения задач
-CELERY_ACCEPT_CONTENT = ['application/json']  #допустимый формат данных.
-CELERY_TASK_SERIALIZER = 'json'  #метод сериализации задач.
-CELERY_RESULT_SERIALIZER = 'json'  #метод сериализации результатов.
+CELERY_BROKER_URL = 'redis://localhost:6379'  # указывает на URL брокера сообщений (Redis). По умолчанию он находится
+# на порту 6379
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'  # указывает на хранилище результатов выполнения задач
+CELERY_ACCEPT_CONTENT = ['application/json']  # допустимый формат данных.
+CELERY_TASK_SERIALIZER = 'json'  # метод сериализации задач.
+CELERY_RESULT_SERIALIZER = 'json'  # метод сериализации результатов.
 
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': os.path.join(BASE_DIR, 'cache_files'), # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с manage.py!
+        'LOCATION': os.path.join(BASE_DIR, 'cache_files'),
+        # Указываем, куда будем сохранять кэшируемые файлы! Не забываем создать папку cache_files внутри папки с
+        # manage.py!
     }
 }

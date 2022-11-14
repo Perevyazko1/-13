@@ -93,10 +93,8 @@ class Comment(models.Model):
     def total_likes_comment(self):
         return self.rating.count()
 
-
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.commentPost.id)])
 
     # def delete_comment(self):
     #     return self.
-

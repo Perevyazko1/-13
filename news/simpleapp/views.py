@@ -55,8 +55,11 @@ class NewsDetail(DetailView):
     def get_context_data(self, *args,**kwargs):
         context = super(NewsDetail, self).get_context_data(**kwargs)
         news = get_object_or_404(News, id=self.kwargs["pk"])
+        # comment = get_object_or_404(Comment, id=self.kwargs["pk"])
+        # total_likes_comment = comment.total_likes_comment()
         total_likes = news.total_likes()
         context['count'] = total_likes
+        # context['count_comment'] = total_likes_comment
         context['comment'] = Comment.objects.filter(commentPost=self.kwargs["pk"])
         return context
 
@@ -228,3 +231,16 @@ def delete_comment(request, pk):
     Comment.objects.get(id=pk).delete()
 
     return redirect(reverse('news_detail' ,args=[str(n)]))
+
+
+@login_required  # проверка зареган ли user
+def like_comment(request, pk):
+    print(pk)
+    # n = Comment.objects.get(id=pk)
+
+    u = User.objects.get(id=request.user.id)
+    if n.rating.filter(id=u.id).exists():
+        n.rating.remove(u)
+    else:
+        n.rating.add(u)
+    return redirect(reverse('news_detail', args=[str(n)]))

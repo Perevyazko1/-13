@@ -28,11 +28,11 @@
         <ul class="list-group-flush">
             {% for comments in comment %}
                 {% if request.user == comments.commentUser %}
-                    <p>{{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: <em>{{ comments.text|censor }}</em>
+                    <p><a href="{% url 'like_comment' news.id %}" class="btn btn-secondary btn-sm">❤ {{ comments.rating.count}}</a>  {{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: <em>{{ comments.text|censor }}</em>
                         <a href="{% url 'delete_comment' comments.id %}" class="btn btn-secondary btn-sm">🗑️</a>
                     </p>
                 {% else %}
-                    <p>{{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: <em>{{ comments.text|censor }}</em> </p>
+                    <p>❤ {{ comments.rating.count}} {{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: <em>{{ comments.text|censor }}</em> </p>
                 {% endif %}
             {% endfor %}
         </ul>

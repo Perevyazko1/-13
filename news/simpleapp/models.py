@@ -88,7 +88,11 @@ class Comment(models.Model):
     commentUser = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()
     dateCreation = models.DateTimeField(auto_now_add=True)
-    rating = models.SmallIntegerField(default=0)
+    rating = models.ManyToManyField(User, related_name='rating_comment')
+
+    def total_likes_comment(self):
+        return self.rating.count()
+
 
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.commentPost.id)])
@@ -96,10 +100,3 @@ class Comment(models.Model):
     # def delete_comment(self):
     #     return self.
 
-    def like(self):
-        self.rating += 1
-        self.save()
-
-    def dislike(self):
-        self.rating -= 1
-        self.save()

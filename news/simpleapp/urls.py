@@ -3,7 +3,7 @@ from django.urls import path
 from django.views.decorators.cache import cache_page
 
 from .views import NewsList, NewsDetail, NewsSearch, NewsCreate, NewsUpdate, NewsDelete, CategoryList, subscribe, \
-   Profile, save_author, like_news, CommentNewsCreate, delete_comment
+   Profile, save_author, like_news, CommentNewsCreate, delete_comment, like_comment
 
 urlpatterns = [
    path('search/', NewsSearch.as_view()),
@@ -12,6 +12,7 @@ urlpatterns = [
    path('<int:pk>/like',like_news , name='like_news'),
    path('<int:pk>/comment',CommentNewsCreate.as_view() , name='comment_news'),
    path('<int:pk>/delete_comment', delete_comment, name='delete_comment'),
+   path('<int:pk>/like_comment', like_comment, name='like_comment'),
    path('create/', NewsCreate.as_view(), name='news_create'),
    path('<int:pk>/update/', NewsUpdate.as_view(), name='news_update'),
    path('<int:pk>/delete/', NewsDelete.as_view(), name='news_delete'),

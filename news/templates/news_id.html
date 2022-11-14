@@ -27,10 +27,17 @@
         <p class="text-center"><a href="{% url 'comment_news' news.id %}" class="btn btn-secondary btn-sm">Оставить коментарий</a></p>
         <ul class="list-group-flush">
             {% for comments in comment %}
-                <p><a href="{% url 'like_comment' comments.id %}" class="btn btn-secondary btn-sm">❤ {{ comments.rating.count}}</a>
-                    {{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: <em>{{ comments.text|censor }}</em></p>
                 {% if request.user == comments.commentUser %}
-                        <p><a href="{% url 'delete_comment' comments.id %}" class="btn btn-secondary btn-sm">🗑️</a></p>
+                        <p>
+                            <a href="{% url 'delete_comment' comments.id %}" class="btn btn-secondary btn-sm">🗑️</a>
+                            <a href="{% url 'like_comment' comments.id %}" class="btn btn-secondary btn-sm">❤ {{ comments.rating.count}}</a>
+                    {{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: <em>{{ comments.text|censor }}</em>
+                        </p>
+                {% else %}
+                   <p>
+                        <a href="{% url 'like_comment' comments.id %}" class="btn btn-secondary btn-sm">❤ {{ comments.rating.count}}</a>
+                        {{ comments.commentUser.first_name }} {{ comments.commentUser.last_name }}: <em>{{ comments.text|censor }}</em>
+                   </p>
                 {% endif %}
             {% endfor %}
         </ul>

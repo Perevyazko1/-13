@@ -234,12 +234,11 @@ def delete_comment(request, pk):
 
 @login_required  # проверка зареган ли user
 def like_comment(request, pk):
-    print(pk)
-    # n = Comment.objects.get(id=pk)
-
+    c = Comment.objects.get(id=pk)
+    n = Comment.objects.get(id=pk).commentPost.id
     u = User.objects.get(id=request.user.id)
-    if n.rating.filter(id=u.id).exists():
-        n.rating.remove(u)
+    if c.rating.filter(id=u.id).exists():
+        c.rating.remove(u)
     else:
-        n.rating.add(u)
+        c.rating.add(u)
     return redirect(reverse('news_detail', args=[str(n)]))

@@ -12,7 +12,6 @@ from .forms import CommentNewsForm, NewsForm
 from .models import Author, Comment, News, NewsCategory
 
 
-
 class Profile(ListView):
     raise_exception = True
     model = User

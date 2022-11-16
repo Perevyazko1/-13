@@ -1,5 +1,4 @@
 amqp==5.1.1
-APScheduler==3.9.1
 asgiref==3.5.2
 async-timeout==4.0.2
 billiard==3.6.4.0
@@ -16,10 +15,10 @@ defusedxml==0.7.1
 Deprecated==1.2.13
 Django==4.1.2
 django-allauth==0.51.0
-django-apscheduler==0.6.2
 django-filter==22.1
 django-widget-tweaks==1.4.12
 flake8==5.0.4
+flake8-import-order==0.18.1
 idna==3.4
 kombu==5.2.4
 mccabe==0.7.0

@@ -1,7 +1,7 @@
 from django import forms
 from django.core.exceptions import ValidationError
 
-from .models import News, Author, Comment
+from .models import Comment, News
 
 
 class NewsForm(forms.ModelForm):
@@ -47,4 +47,4 @@ class CommentNewsForm(forms.ModelForm):
             'text',
             # 'commentPost',
             # 'commentUser',
-]
+        ]

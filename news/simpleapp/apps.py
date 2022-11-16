@@ -6,4 +6,4 @@ class SimpleappConfig(AppConfig):
     name = 'simpleapp'
 
     def ready(self):
-       from . import signals
+        from . import signals

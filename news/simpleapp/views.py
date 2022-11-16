@@ -1,19 +1,15 @@
 # Импортируем класс, который говорит нам о том,
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.contrib.auth.models import User, Group
-from django.core.mail import send_mail
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404, render, redirect
-from django.urls import reverse_lazy, reverse
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-from .forms import NewsForm, CommentNewsForm
-from .models import News, NewsCategory, Author, Comment
-from .filters import NewsFilter
+from django.contrib.auth.models import Group, User
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
 from django.core.cache import cache
-from django.core.mail import EmailMultiAlternatives  # импортируем класс для создание объекта письма с html
-from django.template.loader import render_to_string  # импортируем функцию, которая срендерит наш html в текст
-from django.conf import settings
+
+from .forms import CommentNewsForm, NewsForm
+from .models import Author, Comment, News, NewsCategory
+from .filters import NewsFilter
 
 
 class Profile(ListView):

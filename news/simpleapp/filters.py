@@ -1,6 +1,7 @@
 from django.forms import DateTimeInput
-from django_filters import FilterSet, DateTimeFilter, ModelChoiceFilter
-from .models import News, NewsCategory
+from django_filters import DateTimeFilter, FilterSet
+
+from .models import News
 
 
 # Создаем свой набор фильтров для модели Product.

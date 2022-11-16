@@ -1,11 +1,12 @@
 from celery import shared_task
-import time
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-from .models import PostCategory, NewsCategory, News
+from .models import News, NewsCategory, PostCategory
+
 from django.conf import settings
 from django.utils import timezone
+
 import datetime
 
 

@@ -1,9 +1,10 @@
+from django.conf import settings
+from django.core.cache import cache
 from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
-from django.core.cache import cache
-from django.conf import settings
+
 from .models import News, PostCategory, User
 from .tasks import send_notifications
 

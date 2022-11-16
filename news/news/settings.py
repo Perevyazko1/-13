@@ -52,7 +52,6 @@ INSTALLED_APPS = [
     'news',
     'simpleapp.apps.SimpleappConfig',
     'django_filters',
-    'django_apscheduler',
 ]
 SITE_ID = 1
 SITE_URL = 'http://127.0.0.1:8000'
@@ -127,7 +126,6 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
-APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
 
 LANGUAGE_CODE = 'ru'
 
@@ -148,7 +146,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # если задача не выполняется за 25 секунд, то она автоматически снимается, можете поставить время побольше,
 # но как правило, это сильно бьёт по производительности сервера
-APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
 
 STATICFILES_DIRS = [
     BASE_DIR / "static"

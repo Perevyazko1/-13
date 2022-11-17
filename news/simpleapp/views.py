@@ -62,10 +62,8 @@ class NewsDetail(DetailView):
                         None)  # кэш очень похож на словарь, и метод get действует так же. Он забирает значение по
         # ключу, если его нет, то забирает None.
         # если объекта нет в кэше, то получаем его и записываем в кэш
-        # print(obj)
         if not obj:
             obj = super().get_object(queryset=self.queryset)
-            # print(obj)
             cache.set(f'news-{self.kwargs["pk"]}', obj)
         # print(cache.get(f'news-23'))
         return obj

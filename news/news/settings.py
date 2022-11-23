@@ -156,7 +156,7 @@ ACCOUNT_EMAIL_REQUIRED = True  # email является обязательным
 ACCOUNT_UNIQUE_EMAIL = True  # email является  уникальным
 ACCOUNT_USERNAME_REQUIRED = False  # username необязательный
 ACCOUNT_AUTHENTICATION_METHOD = 'email'  # аутентификация будет происходить посредством электронной почты
-ACCOUNT_EMAIL_VERIFICATION = 'none'  # верификация почты отсутствует
+ACCOUNT_EMAIL_VERIFICATION = 'mandatory'  # верификация почты обязательно
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.mail.ru'  # адрес сервера Яндекс-почты для всех один и тот же

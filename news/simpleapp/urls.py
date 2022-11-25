@@ -1,7 +1,6 @@
 from django.urls import path
 # Импортируем созданные нами представления
 from django.views.decorators.cache import cache_page
-
 from .views import CategoryList, CommentNewsCreate, delete_comment, \
     like_comment, like_news, NewsCreate, NewsDelete, NewsDetail, NewsList, \
     NewsSearch, NewsUpdate, Profile, save_author, subscribe
@@ -23,3 +22,4 @@ urlpatterns = [
     path('profile/author', save_author, name='new_author'),
 
 ]
+

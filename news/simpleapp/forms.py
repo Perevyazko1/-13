@@ -14,6 +14,7 @@ class NewsForm(forms.ModelForm):
             'text',
             'category',
             'categoryType',
+            'image',
 
         ]
 

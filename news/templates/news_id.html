@@ -19,10 +19,23 @@
    {% if news %}
 
 <!-- В контенте на странице мы выводим сам товар, идентификатор которого был передан в url -->
-        <h4>{{ news.text|censor }}</h4>
-
         <h4>{{news.dateCreation|date:'d M Y'}}</h4>
+        <h4>
 
+            <style>
+                img {
+                    border: 3px solid #808080;
+                    }
+            </style>
+
+            <img
+                src="{{ news.image.url}}" style="max-height:400px" align="left"
+                style=" border: 20px solid #ffffff;"
+            />
+
+            <i>{{ news.text|censor }}</i>
+        </h4>
+        <br><br><br>
         <p class="text-center"><a href="{% url 'like_news' news.id %}" class="btn btn-secondary btn-sm">❤ {{ count }}</a></p>
         <p class="text-center"><a href="{% url 'comment_news' news.id %}" class="btn btn-secondary btn-sm">Оставить коментарий</a></p>
         <ul class="list-group-flush">
@@ -45,6 +58,5 @@
        <h2>Новостей нет, но вы держитесь!</h2>
    {% endif %}
 
-    <footer><a href="https://www.ya.ru" target="_blank" title="я">Яндекс</a></footer>
 
 {% endblock content %}

@@ -5,7 +5,7 @@ from django.urls import reverse
 
 
 class Author(models.Model):
-    authorUser = models.OneToOneField(User, on_delete=models.CASCADE)
+    authorUser = models.OneToOneField(User, on_delete=models.CASCADE, default=1, blank=True)
 
     ratingAuthor = models.SmallIntegerField(default=0)
 
@@ -59,7 +59,7 @@ class News(models.Model):
     title = models.CharField(max_length=128, verbose_name='Заголовок')
     text = models.TextField(verbose_name='Текст')
     rating = models.ManyToManyField(User, related_name='rating')
-    image = models.ImageField(upload_to='images/')
+    image = models.ImageField(upload_to='images/', default=None)
     ordering = ['-dateCreation']
 
     def total_likes(self):

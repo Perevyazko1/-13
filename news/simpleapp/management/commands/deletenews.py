@@ -11,18 +11,15 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         # здесь можете писать любой код, который выполнется при вызове вашей команды
-        self.stdout.readable()
-        self.stdout.write(
-            'Do you really want to delete all products? yes/no')  # спрашиваем пользователя действительно ли он хочет удалить все товары
-        answer = input(f'Вы хотите удалить все новости в категории {options["category"]} ')  # считываем подтверждение
+        answer = input(f'Вы хотите удалить все новости в категории {options["category"]}? y/n ')  # считываем подтверждение
 
-        if answer != 'yes':  # в случае подтверждения действительно удаляем все товары
+        if answer != 'y':  # в случае подтверждения действительно удаляем все товары
             self.stdout.write(self.style.EROR('Отменено.'))
 
 
         try:
             category = NewsCategory.objects.get(name=options['category'])
-            News.object.filter(category=category).delete()
+            News.objects.filter(category=category).delete()
             self.stdout.write(self.style.SUCCESS(
             f'Все новости в категории {category.name} успешно удалены'))  # в случае неправильного подтверждения
 

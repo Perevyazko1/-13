@@ -1,7 +1,25 @@
+from django.contrib import auth
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Sum
 from django.urls import reverse
+
+
+def get_full_name(self):
+    if self.last_name:
+        return f'{self.last_name} {self.first_name}'
+    else:
+        return f'{self.username}'
+
+
+User.add_to_class("__str__", get_full_name)
+
+# class User(auth.models.User):
+#     def __str__(self):
+#         if self.last_name:
+#             return f'{self.last_name} {self.first_name}'
+#         else:
+#             return f'{self.username}'
 
 
 class Author(models.Model):
@@ -27,6 +45,12 @@ class Author(models.Model):
 
         self.ratingAuthor = post_rating * 3 + comment_rating + compost_rating
         self.save()
+
+    def __str__(self):
+        if self.authorUser.last_name:
+            return f'{self.authorUser.last_name} {self.authorUser.first_name}'
+        else:
+            return f'{self.authorUser.username}'
 
 
 class NewsCategory(models.Model):
@@ -97,5 +121,5 @@ class Comment(models.Model):
     def get_absolute_url(self):
         return reverse('news_detail', args=[str(self.commentPost.id)])
 
-    # def delete_comment(self):
-    #     return self.
+    def delete_likes(self):
+        return self.rating.update(quantity=0)

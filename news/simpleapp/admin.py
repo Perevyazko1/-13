@@ -1,8 +1,37 @@
 from django.contrib import admin
 
-from .models import Author, Comment, News
-# from .. import simpleapp
+from .models import Author, Comment, News, NewsCategory
 
-admin.site.register(News)
-admin.site.register(Author)
-admin.site.register(Comment)
+
+def nullfy_rating(modeladmin, request,
+                    queryset):  # request — объект хранящий информацию о запросе и queryset — грубо говоря набор
+    # объектов, которых мы выделили галочками.
+    queryset.rating.delete()
+
+
+nullfy_rating.short_description = 'Обнулить лайки'  # описание для более понятного представления в админ панеле
+# задаётся, как будто это объект
+
+
+class AuthorAdmin(admin.ModelAdmin):
+    list_display = ('authorUser', 'ratingAuthor')  # оставляем только имя и цену товара
+
+
+# создаём новый класс для представления товаров в админке
+class NewsAdmin(admin.ModelAdmin):
+    # list_display — это список или кортеж со всеми полями, которые вы хотите видеть в таблице с товарами
+    list_display = ('dateCreation', 'title', 'author', 'total_likes')  # оставляем только имя и цену товара
+    list_filter = ('dateCreation', 'author')  # добавляем примитивные фильтры в нашу админку
+    search_fields = ('title', 'text')  # тут всё очень похоже на фильтры из запросов в базу
+
+
+class CommentAdmin(admin.ModelAdmin):
+    list_display = ('dateCreation', 'commentPost', 'commentUser', 'text', 'total_likes_comment')
+    list_filter = ('dateCreation', 'commentUser')
+    search_fields = ['text']
+    actions = [nullfy_rating]  # добавляем действия в список
+
+admin.site.register(News, NewsAdmin)
+admin.site.register(Author, AuthorAdmin)
+admin.site.register(Comment, CommentAdmin)
+admin.site.register(NewsCategory)

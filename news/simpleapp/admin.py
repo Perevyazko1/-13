@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
 
 from .models import Author, Comment, News, NewsCategory

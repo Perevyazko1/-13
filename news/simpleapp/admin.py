@@ -32,7 +32,7 @@ class NewsAdmin(admin.ModelAdmin):
 
     def get_image(self, object):
         return mark_safe(f'<img src = "{object.image.url}" width=50')
-
+    get_image.short_description = 'Фото'
 
 class CommentAdmin(admin.ModelAdmin):
     list_display = ('dateCreation', 'commentPost', 'commentUser', 'text', 'total_likes_comment')
@@ -45,5 +45,5 @@ admin.site.register(News, NewsAdmin)
 admin.site.register(Author, AuthorAdmin)
 admin.site.register(Comment, CommentAdmin)
 admin.site.register(NewsCategory)
-
+admin.site
 admin.site.site_title = 'Админ панель News Portal'

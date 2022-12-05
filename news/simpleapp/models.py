@@ -22,6 +22,10 @@ User.add_to_class("__str__", get_full_name)
 
 
 class Author(models.Model):
+    class Meta:
+        verbose_name = u"Автор"
+        verbose_name_plural = u"Авторы"
+
     authorUser = models.OneToOneField(User, on_delete=models.CASCADE, default=1, blank=True)
 
     ratingAuthor = models.SmallIntegerField(default=0)
@@ -53,6 +57,10 @@ class Author(models.Model):
 
 
 class NewsCategory(models.Model):
+    class Meta:
+        verbose_name = u"Категория новости"
+        verbose_name_plural = u"Категории новостей"
+
     name = models.CharField(max_length=100, unique=True, default=None)
     subscribes = models.ManyToManyField(User, related_name='categories')
 
@@ -62,7 +70,10 @@ class NewsCategory(models.Model):
 
 # Create your models here.
 class News(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = u"Новость"
+        verbose_name_plural = u"Новости"
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор')
     NEWS = 'NW'
     ARTICLE = 'AR'
     CATEGORY_CHOICES = (
@@ -108,6 +119,10 @@ class PostCategory(models.Model):
 
 
 class Comment(models.Model):
+    class Meta:
+        verbose_name = u"Комментарий к новости"
+        verbose_name_plural = u"Комментарии к новостям"
+
     commentPost = models.ForeignKey(News, on_delete=models.CASCADE)
     commentUser = models.ForeignKey(User, on_delete=models.CASCADE)
     text = models.TextField()

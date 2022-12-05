@@ -26,7 +26,7 @@ class Author(models.Model):
         verbose_name = u"Автор"
         verbose_name_plural = u"Авторы"
 
-    authorUser = models.OneToOneField(User, on_delete=models.CASCADE, default=1, blank=True)
+    authorUser = models.OneToOneField(User, on_delete=models.CASCADE, default=1, blank=True, verbose_name='Пользователь')
 
     ratingAuthor = models.SmallIntegerField(default=0)
 
@@ -123,10 +123,10 @@ class Comment(models.Model):
         verbose_name = u"Комментарий к новости"
         verbose_name_plural = u"Комментарии к новостям"
 
-    commentPost = models.ForeignKey(News, on_delete=models.CASCADE)
-    commentUser = models.ForeignKey(User, on_delete=models.CASCADE)
-    text = models.TextField()
-    dateCreation = models.DateTimeField(auto_now_add=True)
+    commentPost = models.ForeignKey(News, on_delete=models.CASCADE, verbose_name='Новость')
+    commentUser = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь')
+    text = models.TextField(verbose_name='Комментарий')
+    dateCreation = models.DateTimeField(auto_now_add=True, verbose_name='Дата')
     rating = models.ManyToManyField(User, related_name='rating_comment')
 
     def total_likes_comment(self):

@@ -1,0 +1,11 @@
+#header {
+    background: #343a40;
+}
+
+#header, .module caption {
+    background: #343a40;
+}
+
+div.breadcrumbs {
+    background: #6c757d;
+}

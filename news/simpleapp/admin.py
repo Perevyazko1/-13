@@ -19,7 +19,7 @@ nullfy_rating.short_description = 'Обнулить лайки'  # описан�
 
 
 class AuthorAdmin(admin.ModelAdmin):
-    list_display = ('authorUser', 'ratingAuthor')  # оставляем только имя и цену товара
+    list_display = ('authorUser', 'rating_author')  # оставляем только имя и цену товара
 
 
 # создаём новый класс для представления товаров в админке
@@ -49,3 +49,4 @@ admin.site.register(Comment, CommentAdmin)
 admin.site.register(NewsCategory)
 
 admin.site.site_title = 'Админ панель News Portal'
+admin.site.site_header = 'Админ панель News Portal'

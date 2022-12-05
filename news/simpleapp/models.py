@@ -1,6 +1,6 @@
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.urls import reverse
 
 
@@ -12,6 +12,7 @@ def get_full_name(self):
 
 
 User.add_to_class("__str__", get_full_name)
+
 
 # class User(auth.models.User):
 #     def __str__(self):
@@ -26,28 +27,31 @@ class Author(models.Model):
         verbose_name = u"Автор"
         verbose_name_plural = u"Авторы"
 
-    authorUser = models.OneToOneField(User, on_delete=models.CASCADE, default=1, blank=True, verbose_name='Пользователь')
+    authorUser = models.OneToOneField(User, on_delete=models.CASCADE, default=1, blank=True,
+                                      verbose_name='Пользователь')
 
     ratingAuthor = models.SmallIntegerField(default=0)
 
-    def update_rating(self):
-        post_rating = self.news_set.aggregate(Sum('rating')).get('rating__sum')
-        if post_rating is None:
-            post_rating = 0
+    def rating_author(self):
+        return self.news_set.aggregate(Count('rating')).get('rating__count')
 
-        comment_rating = self.authorUser.comment_set.aggregate(Sum('rating')).get('rating__sum')
-        if comment_rating is None:
-            comment_rating = 0
-
-        compost_rating = 0
-        for post in self.post_set.all():
-            rating = post.comment_set.aggregate(Sum('rating')).get('rating__sum')
-            if rating is None:
-                rating = 0
-            compost_rating += rating
-
-        self.ratingAuthor = post_rating * 3 + comment_rating + compost_rating
-        self.save()
+        # post_rating = self.news_set.aggregate(Sum('rating')).get('rating__sum')
+        # if post_rating is None:
+        #     post_rating = 0
+        #
+        # comment_rating = self.authorUser.comment_set.aggregate(Sum('rating')).get('rating__sum')
+        # if comment_rating is None:
+        #     comment_rating = 0
+        #
+        # compost_rating = 0
+        # for post in self.post_set.all():
+        #     rating = post.comment_set.aggregate(Sum('rating')).get('rating__sum')
+        #     if rating is None:
+        #         rating = 0
+        #     compost_rating += rating
+        #
+        # self.ratingAuthor = post_rating * 3 + comment_rating + compost_rating
+        # self.save()
 
     def __str__(self):
         if self.authorUser.last_name:
@@ -73,6 +77,7 @@ class News(models.Model):
     class Meta:
         verbose_name = u"Новость"
         verbose_name_plural = u"Новости"
+
     author = models.ForeignKey(Author, on_delete=models.CASCADE, verbose_name='Автор')
     NEWS = 'NW'
     ARTICLE = 'AR'

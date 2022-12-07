@@ -6,7 +6,7 @@
 <h1>{{profile}}</h1>
 <h2>{{email}}</h2>
     {% if is_author %}
-        <p class="text-center">Автор</p>
+        <p class="text-center"><a href="{% url 'delete_author'  %}" class="btn btn-secondary btn-sm">Отказаться от авторства</a></p>
     {% else %}
         <p class="text-center"><a href="{% url 'new_author'  %}" class="btn btn-secondary btn-sm">Стать автором</a></p>
     {% endif %}

@@ -4,7 +4,7 @@ from django.views.decorators.cache import cache_page
 
 from .views import CategoryList, CommentNewsCreate, delete_comment, \
     like_comment, like_news, NewsCreate, NewsDelete, NewsDetail, NewsList, \
-    NewsSearch, NewsUpdate, Profile, save_author, subscribe
+    NewsSearch, NewsUpdate, Profile, save_author, subscribe, delete_author
 
 urlpatterns = [
     path('search/', NewsSearch.as_view()),
@@ -21,5 +21,7 @@ urlpatterns = [
     path('categories/<int:pk>/subscribe', subscribe, name='subscribe'),
     path('profile/', Profile.as_view()),
     path('profile/author', save_author, name='new_author'),
+    path('profile/author', save_author, name='new_author'),
+    path('profile/delete_author', delete_author, name='delete_author'),
 
 ]

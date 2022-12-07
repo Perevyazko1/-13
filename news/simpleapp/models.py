@@ -55,7 +55,7 @@ class Author(models.Model):
 
     def __str__(self):
         if self.authorUser.last_name:
-            return f'{self.authorUser.last_name} {self.authorUser.first_name}'
+            return f'{self.authorUser.last_name} {self.authorUser.first_name}({self.authorUser.email})'
         else:
             return f'{self.authorUser.username}'
 

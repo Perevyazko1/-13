@@ -108,11 +108,12 @@ class NewsCreate(PermissionRequiredMixin, CreateView):
     template_name = 'edit_news.html'
 
     def form_valid(self, form):  # Переопределение метода при валидации формы NewsForm
+        print(self.request.user.id)
 
         self.object = form.save(commit=False
                                 )  # object - экземпляр заполненной формы NewsForm из запроса POST. В БД не сохраняем
         self.object.author = Author.objects.get(
-            authorUser__username=self.request.user
+            authorUser__id=self.request.user.id
         )  # Назначяем полю author модели News экзамеляр модели Author, где пользователь-автор совпадает с
         # пользователем-юзер
         return super().form_valid(
@@ -180,6 +181,16 @@ def save_author(request):
     group = Group.objects.get(id=1)
     user.groups.add(group)
     Author.objects.create(authorUser_id=user.id)
+    return render(request, 'save_author.html', {'message': message})
+
+
+def delete_author(request):
+    user = User.objects.get(id=request.user.id)
+    message = 'Удаление автора успешно!'
+
+    group = Group.objects.get(id=1)
+    user.groups.remove(group)
+    Author.objects.get(authorUser_id=user.id).delete()
     return render(request, 'save_author.html', {'message': message})
 
 

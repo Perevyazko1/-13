@@ -179,7 +179,6 @@ def subscribe(request, pk):
 @login_required  # проверка зареган ли user
 def save_author(request):
     user = User.objects.get(id=request.user.id)
-    message = 'Поздравляю вы теперь автор!'
 
     group = Group.objects.get(id=1)
     user.groups.add(group)
@@ -189,13 +188,13 @@ def save_author(request):
 
 def delete_author(request):
     user = User.objects.get(id=request.user.id)
-    message = 'Удаление автора успешно!'
 
     group = Group.objects.get(id=1)
     user.groups.remove(group)
     Author.objects.get(authorUser_id=user.id).delete()
     # return render(request, 'save_author.html', {'message': message})
     return redirect(reverse('profile'))
+
 
 @login_required  # проверка зареган ли user
 def like_news(request, pk):

@@ -21,7 +21,6 @@ urlpatterns = [
     path('categories/<int:pk>/subscribe', subscribe, name='subscribe'),
     path('profile/', Profile.as_view()),
     path('profile/author', save_author, name='new_author'),
-    path('profile/author', save_author, name='new_author'),
     path('profile/delete_author', delete_author, name='delete_author'),
 
 ]

@@ -4,8 +4,9 @@ from django.core.mail import EmailMultiAlternatives
 from django.db.models.signals import m2m_changed, post_delete, post_save
 from django.dispatch import receiver
 from django.template.loader import render_to_string
+from django.contrib.auth.models import Group, User
 
-from .models import News, PostCategory, User
+from .models import News, PostCategory
 from .tasks import send_notifications
 
 
@@ -49,6 +50,8 @@ def hello_new_user(sender, instance, created, **kwargs):
         email = [instance.email]
         user = instance
         send_new_user(user, email)
+        group = Group.objects.get(id=2)
+        user.groups.add(group)
 
 
 @receiver(post_delete, sender=News)

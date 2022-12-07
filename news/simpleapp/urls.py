@@ -19,7 +19,7 @@ urlpatterns = [
     path('<int:pk>/delete/', NewsDelete.as_view(), name='news_delete'),
     path('categories/<int:pk>/', cache_page(60 * 5)(CategoryList.as_view()), name='category_list'),
     path('categories/<int:pk>/subscribe', subscribe, name='subscribe'),
-    path('profile/', Profile.as_view()),
+    path('profile/', Profile.as_view(), name='profile'),
     path('profile/author', save_author, name='new_author'),
     path('profile/delete_author', delete_author, name='delete_author'),
 

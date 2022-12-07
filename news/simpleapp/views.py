@@ -23,6 +23,9 @@ class Profile(ListView):
         context['is_author'] = Author.objects.filter(authorUser_id=self.request.user.id).exists()
         context['profile'] = self.request.user
         context['email'] = self.request.user.email
+        author = Author.objects.get(authorUser_id=self.request.user.id)
+        rating_author = author.rating_author()
+        context['rating_author'] = rating_author
         return context
 
 
@@ -181,7 +184,7 @@ def save_author(request):
     group = Group.objects.get(id=1)
     user.groups.add(group)
     Author.objects.create(authorUser_id=user.id)
-    return render(request, 'save_author.html', {'message': message})
+    return redirect(reverse('profile'))
 
 
 def delete_author(request):
@@ -191,8 +194,8 @@ def delete_author(request):
     group = Group.objects.get(id=1)
     user.groups.remove(group)
     Author.objects.get(authorUser_id=user.id).delete()
-    return render(request, 'save_author.html', {'message': message})
-
+    # return render(request, 'save_author.html', {'message': message})
+    return redirect(reverse('profile'))
 
 @login_required  # проверка зареган ли user
 def like_news(request, pk):

@@ -5,6 +5,7 @@
 
 <h1>{{profile}}</h1>
 <h2>{{email}}</h2>
+<h2>Рэйтинг : {{rating_author}}</h2>
     {% if is_author %}
         <p class="text-center"><a href="{% url 'delete_author'  %}" class="btn btn-secondary btn-sm">Отказаться от авторства</a></p>
     {% else %}

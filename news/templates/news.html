@@ -14,19 +14,13 @@ News
    то выведется указанный в фильтре текст -->
 <!--   <h3> {{ next_sale|default_if_none:"Чуть позже сообщим о распродаже!" }} </h3>-->
 
-    {# Теперь будем проверять не request.user.is_authenticated, а конкретные права #}
-    {% if perms.simpleapp.add_news %}
-    <a href="{% url 'news_create' %}">Добавить новость</a>
-    {% endif %}
-
-   <hr>
+<p></p>
    {% if news %}
 
 
 
         <ul class="list-group-flush">
            {% for new in news|dictsortreversed:"dateCreation"%}
-            <li class="list-group-item">
                     <small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
                     <small class="fw-bold">{{ new.title|censor }}&nbsp;</small>
                     <small class="fw-bold">категории:
@@ -38,17 +32,7 @@ News
                          <a href="{% url 'news_detail' new.id %}">{{ new.text|censor|truncatechars:20}}</a>
                     <small class="fw-bold"> ❤ {{ new.rating.count}}</small>
                      </p>
-                </li>
         </ul>
-                    <td>
-                        {# А здесь доступ для каждой ссылки теперь будем проверять отдельно #}
-                        {% if perms.simpleapp.change_news %}
-                        <a href="{% url 'news_update' pk=new.id %}">Изменить</a>
-                        {% endif %}
-                        {% if perms.simpleapp.delete_news %}
-                        <a href="{% url 'news_delete' pk=new.id %}">Удалить</a>
-                        {% endif %}
-                    </td>
                 </tr>
             {% endfor %}
 

@@ -26,6 +26,7 @@ class Profile(ListView):
         author = Author.objects.get(authorUser_id=self.request.user.id)
         rating_author = author.rating_author()
         context['rating_author'] = rating_author
+        context['news'] = News.objects.filter(author=author)
         return context
 
 

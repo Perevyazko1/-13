@@ -1,14 +1,74 @@
 {% extends 'flatpages/default.html' %}
+{% load custom_filters %}
 
 
 {% block content %}
 
-<h1>{{profile}}</h1>
-<h2>{{email}}</h2>
-<h2>Рэйтинг : {{rating_author}}</h2>
+    <h1>{{profile}}</h1>
+    <h2>{{email}}</h2>
+    <h2>Рэйтинг : {{rating_author}}</h2>
+
+
+    <p></p>
     {% if is_author %}
         <p class="text-center"><a href="{% url 'delete_author'  %}" class="btn btn-secondary btn-sm">Отказаться от авторства</a></p>
     {% else %}
         <p class="text-center"><a href="{% url 'new_author'  %}" class="btn btn-secondary btn-sm">Стать автором</a></p>
     {% endif %}
+
+    {% if perms.simpleapp.add_news %}
+    <a href="{% url 'news_create' %}">Добавить новость</a>
+    {% endif %}
+    <p></p>
+   {% if news %}
+
+           {% for new in news|dictsortreversed:"dateCreation"%}
+            <li class="list-group-item">
+                    <small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
+                    <small class="fw-bold">{{ new.title|censor }}&nbsp;</small>
+                    <small class="fw-bold">категории:
+                        {% for category in new.category.all %}
+                            <a href="{% url 'category_list' category.id %}"> {{ category }}</a>
+                        {% endfor %}
+                    </small>
+                     <p>
+                         <a href="{% url 'news_detail' new.id %}">{{ new.text|censor|truncatechars:20}}</a>
+                    <small class="fw-bold"> ❤ {{ new.rating.count}}</small>
+                     </p>
+                        {# А здесь доступ для каждой ссылки теперь будем проверять отдельно #}
+                        {% if perms.simpleapp.change_news %}
+                        <a href="{% url 'news_update' pk=new.id %}">Изменить</a>
+                        {% endif %}
+                        {% if perms.simpleapp.delete_news %}
+                        <a href="{% url 'news_delete' pk=new.id %}">Удалить</a>
+                        {% endif %}
+            {% endfor %}
+
+
+   {% else %}
+       <h2>Вы пока не публиковали новостей.</h2>
+   {% endif %}
+    {# Добавляем пагинацию на страницу #}
+
+   {# Информация о предыдущих страницах #}
+   {% if page_obj.has_previous %}
+       <a href="?page=1">1</a>
+       {% if page_obj.previous_page_number != 1 %}
+           ...
+           <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
+       {% endif %}
+   {% endif %}
+
+   {# Информация о текущей странице #}
+   {{ page_obj.number }}
+
+   {# Информация о следующих страницах #}
+   {% if page_obj.has_next %}
+       <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
+       {% if paginator.num_pages != page_obj.next_page_number %}
+           ...
+           <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
+       {% endif %}
+   {% endif %}
+
 {% endblock content %}

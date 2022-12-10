@@ -190,10 +190,12 @@ def save_author(request):
 def delete_author(request):
     user = User.objects.get(id=request.user.id)
     group = Group.objects.get(id=1)
-    user.groups.remove(group)
-    Author.objects.get(authorUser_id=user.id).delete()
-    # return render(request, 'save_author.html', {'message': message})
-    # return redirect(reverse('profile'))
+    if request.method == 'POST':
+        user.groups.remove(group)
+        Author.objects.get(authorUser_id=user.id).delete()
+        return redirect(reverse('profile'))
+        # return render(request, 'save_author.html', {'message': message})
+        # return redirect(reverse('profile'))
     return render(request, 'delete_author.html')
 
 

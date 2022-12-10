@@ -23,10 +23,11 @@ class Profile(ListView):
         context['is_author'] = Author.objects.filter(authorUser_id=self.request.user.id).exists()
         context['profile'] = self.request.user
         context['email'] = self.request.user.email
-        author = Author.objects.get(authorUser_id=self.request.user.id)
-        rating_author = author.rating_author()
-        context['rating_author'] = rating_author
-        context['news'] = News.objects.filter(author=author)
+        if context['is_author']:
+            author = Author.objects.get(authorUser_id=self.request.user.id)
+            rating_author = author.rating_author()
+            context['rating_author'] = rating_author
+            context['news'] = News.objects.filter(author=author)
         return context
 
 
@@ -170,7 +171,6 @@ class CategoryList(ListView):
 def subscribe(request, pk):
     user = request.user
     category = NewsCategory.objects.get(id=pk)
-    print(category)
     category.subscribes.add(user)
     message = 'Вы успешно подписались на рассылку новостей категории'
 
@@ -189,12 +189,12 @@ def save_author(request):
 
 def delete_author(request):
     user = User.objects.get(id=request.user.id)
-
     group = Group.objects.get(id=1)
     user.groups.remove(group)
     Author.objects.get(authorUser_id=user.id).delete()
     # return render(request, 'save_author.html', {'message': message})
-    return redirect(reverse('profile'))
+    # return redirect(reverse('profile'))
+    return render(request, 'delete_author.html')
 
 
 @login_required  # проверка зареган ли user

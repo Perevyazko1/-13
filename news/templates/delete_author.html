@@ -1,0 +1,18 @@
+{% extends 'flatpages/default.html' %}
+
+{% block content %}
+<h1 xmlns="http://www.w3.org/1999/html">Отказ от авторства</h1>
+<hr>
+<dialog open>
+   <div>
+            <form action="" method="post">
+                {% csrf_token %}
+                <p>Вы хотите отказаться от авторства ?</p>
+                <p>Это удалит все ваши новости и статьи.</p>
+                <p><input type="submit" value="Да" /></p>
+            </form>
+
+                <button onclick="window.location='http://127.0.0.1:8000/news/profile/'">Отменить</button>
+   </div>
+</dialog>
+{% endblock content %}

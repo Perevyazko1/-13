@@ -187,6 +187,64 @@ CACHES = {
     }
 }
 
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'general': {
+            'format': '%(asctime)s %(levelname)s %(module)s',
+        },
+        'simple': {
+            'format': '%(asctime)s %(levelname)s %(message)s',
+        },
+        'formatter_console_warning': {
+            'format': '%(pathname)s',
+        },
+        'formatter_console_error_critical': {
+            'format': '%(exc_info)s',
+        },
+
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'handlers': {
+        'console_error': {
+                'level': 'ERROR',
+                'class': 'logging.StreamHandler',
+                'formatter': 'formatter_console_error_critical',
+            },
+
+        'console_warning': {
+            'level': 'WARNING',
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'formatter_console_warning'
+        },
+
+        'console': {
+            'filters': ['require_debug_true'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple'
+        },
+
+        'general': {
+            'level': 'INFO',
+            'filters': ['require_debug_true'],
+            'class': 'logging.FileHandler',
+            'filename': 'general.log',
+            'formatter': 'general'
+        }
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'console_warning', 'general'],
+            'propagate': True,
+        },
+    }
+}

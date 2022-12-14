@@ -209,7 +209,9 @@ LOGGING = {
         'formatter_errors': {
             'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s %(exc_info)s',
         },
-
+        'formatter_security': {
+            'format': '%(asctime)s %(levelname)s %(module)s %(message)s',
+        },
     },
     'filters': {
         'require_debug_true': {
@@ -218,10 +220,10 @@ LOGGING = {
     },
     'handlers': {
         'console_error': {
-                'level': 'ERROR',
-                'class': 'logging.StreamHandler',
-                'formatter': 'formatter_console_error_critical',
-            },
+            'level': 'ERROR',
+            'class': 'logging.StreamHandler',
+            'formatter': 'formatter_console_error_critical',
+        },
 
         'console_warning': {
             'level': 'WARNING',
@@ -251,6 +253,15 @@ LOGGING = {
             'formatter': 'formatter_errors'
 
         },
+        'security': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.FileHandler',
+            'filename': 'security.log',
+            'formatter': 'formatter_security'
+
+        },
+
     },
     'loggers': {
         'django': {
@@ -275,6 +286,11 @@ LOGGING = {
         'django.db.backends': {
             'handlers': ['errors'],
             'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.security': {
+            'handlers': ['security'],
+            'level': 'INFO',
             'propagate': True,
         },
 

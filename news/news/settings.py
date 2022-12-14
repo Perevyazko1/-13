@@ -206,6 +206,9 @@ LOGGING = {
         'formatter_console_error_critical': {
             'format': '%(exc_info)s',
         },
+        'formatter_errors': {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s %(exc_info)s',
+        },
 
     },
     'filters': {
@@ -239,12 +242,41 @@ LOGGING = {
             'class': 'logging.FileHandler',
             'filename': 'general.log',
             'formatter': 'general'
-        }
+        },
+        'errors': {
+            'level': 'ERROR',
+            'filters': ['require_debug_true'],
+            'class': 'logging.FileHandler',
+            'filename': 'errors.log',
+            'formatter': 'formatter_errors'
+
+        },
     },
     'loggers': {
         'django': {
             'handlers': ['console', 'console_warning', 'general'],
             'propagate': True,
         },
+        'django.request': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.server': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.template': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'django.db.backends': {
+            'handlers': ['errors'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+
     }
 }

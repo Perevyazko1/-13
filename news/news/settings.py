@@ -132,7 +132,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 
@@ -153,7 +153,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 STATICFILES_DIRS = [
     BASE_DIR / "static"
 ]
-
+ADMINS = (
+    ('admin', 'a.perevyazko@gmail.com'),
+)
 # обязательные и необязательные поля регистрации
 ACCOUNT_EMAIL_REQUIRED = True  # email является обязательным
 ACCOUNT_UNIQUE_EMAIL = True  # email является  уникальным
@@ -169,6 +171,7 @@ EMAIL_HOST_USER = os.getenv("EMAIL_HOST_USER")  # ваше имя пользов
 EMAIL_HOST_PASSWORD = os.getenv("EMAIL_HOST_PASSWORD")  # пароль от почты
 EMAIL_USE_SSL = True  # Яндекс использует ssl, подробнее о том, что это, почитайте в дополнительных источниках,
 # но включать его здесь обязательно
+SERVER_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL")
 
 CELERY_BROKER_URL = 'redis://localhost:6379'  # указывает на URL брокера сообщений (Redis). По умолчанию он находится
@@ -212,15 +215,24 @@ LOGGING = {
         'formatter_security': {
             'format': '%(asctime)s %(levelname)s %(module)s %(message)s',
         },
+        'formatter_mail': {
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s ',
+        },
+
     },
     'filters': {
         'require_debug_true': {
             '()': 'django.utils.log.RequireDebugTrue',
         },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+
     },
     'handlers': {
         'console_error': {
             'level': 'ERROR',
+            'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'formatter_console_error_critical',
         },
@@ -233,6 +245,7 @@ LOGGING = {
         },
 
         'console': {
+            'level': 'DEBUG',
             'filters': ['require_debug_true'],
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
@@ -240,14 +253,13 @@ LOGGING = {
 
         'general': {
             'level': 'INFO',
-            'filters': ['require_debug_true'],
+            'filters': ['require_debug_false'],
             'class': 'logging.FileHandler',
             'filename': 'general.log',
             'formatter': 'general'
         },
         'errors': {
             'level': 'ERROR',
-            'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
             'filename': 'errors.log',
             'formatter': 'formatter_errors'
@@ -255,42 +267,43 @@ LOGGING = {
         },
         'security': {
             'level': 'ERROR',
-            'filters': ['require_debug_true'],
             'class': 'logging.FileHandler',
             'filename': 'security.log',
             'formatter': 'formatter_security'
 
         },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            # 'include_html': True,
+            'formatter': 'formatter_mail'
 
+        },
     },
     'loggers': {
         'django': {
-            'handlers': ['console', 'console_warning', 'general'],
+            'handlers': ['console', 'console_warning', 'console_error', 'general'],
             'propagate': True,
         },
         'django.request': {
-            'handlers': ['errors'],
-            'level': 'ERROR',
+            'handlers': ['errors', 'mail_admins'],
             'propagate': True,
         },
         'django.server': {
-            'handlers': ['errors'],
-            'level': 'ERROR',
+            'handlers': ['errors', 'mail_admins'],
             'propagate': True,
         },
         'django.template': {
             'handlers': ['errors'],
-            'level': 'ERROR',
             'propagate': True,
         },
         'django.db.backends': {
             'handlers': ['errors'],
-            'level': 'ERROR',
             'propagate': True,
         },
         'django.security': {
             'handlers': ['security'],
-            'level': 'INFO',
             'propagate': True,
         },
 

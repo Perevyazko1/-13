@@ -204,10 +204,7 @@ LOGGING = {
             'format': '%(asctime)s %(levelname)s %(message)s',
         },
         'formatter_console_warning': {
-            'format': '%(pathname)s',
-        },
-        'formatter_console_error_critical': {
-            'format': '%(exc_info)s',
+            'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s',
         },
         'formatter_errors': {
             'format': '%(asctime)s %(levelname)s %(message)s %(pathname)s %(exc_info)s',
@@ -227,26 +224,57 @@ LOGGING = {
         'require_debug_false': {
             '()': 'django.utils.log.RequireDebugFalse',
         },
+        'filter_debug_level': {
+            '()': 'logging_formatter.log_middleware.FilterLevels',
+            'filter_levels': [
+                "DEBUG"
+            ]
+        },
+        'filter_info_level': {
+            '()': 'logging_formatter.log_middleware.FilterLevels',
+            'filter_levels': [
+                "INFO"
+            ]
+        },
+
+        'filter_warning_level': {
+            '()': 'logging_formatter.log_middleware.FilterLevels',
+            'filter_levels': [
+                "WARNING"
+            ]
+        },
+        'filter_error_level': {
+            '()': 'logging_formatter.log_middleware.FilterLevels',
+            'filter_levels': [
+                "ERROR"
+            ]
+        },
+        'filter_critical_level': {
+            '()': 'logging_formatter.log_middleware.FilterLevels',
+            'filter_levels': [
+                "CRITICAL"
+            ]
+        },
 
     },
     'handlers': {
         'console_error': {
             'level': 'ERROR',
-            'filters': ['require_debug_true'],
+            'filters': ['require_debug_true', 'filter_error_level', 'filter_critical_level'],
             'class': 'logging.StreamHandler',
-            'formatter': 'formatter_console_error_critical',
+            'formatter': 'formatter_errors',
         },
 
         'console_warning': {
             'level': 'WARNING',
-            'filters': ['require_debug_true'],
+            'filters': ['require_debug_true', 'filter_warning_level'],
             'class': 'logging.StreamHandler',
             'formatter': 'formatter_console_warning'
         },
 
         'console': {
             'level': 'DEBUG',
-            'filters': ['require_debug_true'],
+            'filters': ['require_debug_true', 'filter_info_level', 'filter_debug_level'],
             'class': 'logging.StreamHandler',
             'formatter': 'simple'
         },

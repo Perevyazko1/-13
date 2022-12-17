@@ -6,6 +6,7 @@ from django.core.cache import cache
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, UpdateView
+from django.utils.translation import gettext as _ # импортируем функцию для перевода
 
 from .filters import NewsFilter
 from .forms import CommentNewsForm, NewsForm
@@ -172,7 +173,8 @@ def subscribe(request, pk):
     user = request.user
     category = NewsCategory.objects.get(id=pk)
     category.subscribes.add(user)
-    message = 'Вы успешно подписались на рассылку новостей категории'
+    message = _('Вы успешно подписались на рассылку новостей категории')
+    msg =_('hello')
 
     return render(request, 'subscribe.html', {'category': category, 'message': message})
 

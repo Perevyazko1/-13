@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.utils.safestring import mark_safe
 
 from .models import Author, Comment, News, NewsCategory
+from modeltranslation.admin import TranslationAdmin
+# импортируем модель амдинки (вспоминаем модуль про переопределение стандартных админ-инструментов)
 
 
 def nullfy_rating(modeladmin, request,
@@ -41,6 +43,13 @@ class CommentAdmin(admin.ModelAdmin):
     list_filter = ('dateCreation', 'commentUser')
     search_fields = ['text']
     actions = [nullfy_rating]  # добавляем действия в список
+
+
+class NewsCategoryAdminTranslate(TranslationAdmin):
+    model = NewsCategory
+
+class NewsAdminTranslate(TranslationAdmin):
+    model =News
 
 
 admin.site.register(News, NewsAdmin)

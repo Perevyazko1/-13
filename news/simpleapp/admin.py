@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.utils.safestring import mark_safe
+from modeltranslation.admin import TranslationAdmin
 
 from .models import Author, Comment, News, NewsCategory
-from modeltranslation.admin import TranslationAdmin
+
+
 # импортируем модель амдинки (вспоминаем модуль про переопределение стандартных админ-инструментов)
 
 
@@ -48,8 +50,9 @@ class CommentAdmin(admin.ModelAdmin):
 class NewsCategoryAdminTranslate(TranslationAdmin):
     model = NewsCategory
 
+
 class NewsAdminTranslate(TranslationAdmin):
-    model =News
+    model = News
 
 
 admin.site.register(News, NewsAdmin)

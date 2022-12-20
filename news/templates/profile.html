@@ -1,5 +1,8 @@
+<!DOCTYPE html>
+<html lang="ru">
 {% extends 'flatpages/default.html' %}
 {% load custom_filters %}
+{% include 'lang_time.html' %}
 
 
 {% block content %}
@@ -23,7 +26,7 @@
    {% if news %}
 
            {% for new in news|dictsortreversed:"dateCreation"%}
-            <li class="list-group-item">
+            <html class="list-group-item">
                     <small class="fw-bold">{{ new.dateCreation|date:'d M Y' }}</small>
                     <small class="fw-bold">{{ new.title|censor }}&nbsp;</small>
                     <small class="fw-bold">категории:
@@ -72,3 +75,5 @@
    {% endif %}
 
 {% endblock content %}
+        </html>
+</html>
